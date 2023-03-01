@@ -1,0 +1,10 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#colecao{
+    background-color: #c3c3c3;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
