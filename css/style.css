@@ -2,10 +2,10 @@
     margin: 0;
     padding: 0;
 }
-#colecao{
-    background-color: #000;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    justify-content: space-around;
+
+#lista-filmes{
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 2rem;
 }
