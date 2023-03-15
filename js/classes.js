@@ -24,5 +24,49 @@ class Filme{
         this.elenco=elenco;
         this.classificacao=classificacao;
         this.avaliacao=avaliacao;
+        this.btnDetalhes=null;
+        
+    }
+    getCard = async () => {
+        let card= document.createElement("div").setAttribute("class","card");
+        let imgCartaz = document.createElement("img")
+        imgCartaz.setAttribute("src",this.cartaz);
+        imgCartaz.setAttribute("class","card-img-top");
+        let cardBody = document.createElement("div").setAttribute("class","card-body");
+        let hCardTitle= document.createElement("h5").setAttribute("class","card-title");
+        let divDetalhes = document.createElement("div");
+        divDetalhes.setAttribute("style","display:flex;justify-content:space-around;");
+        let divGenero = document.createElement("div");
+        divGenero.setAttribute("style","flex-grow:1;");
+        let divAnoProducao= document.createElement("div");
+        divAnoProducao.setAttribute("style","flex-grow:1;");
+        let divClassificacao= document.createElement("div");
+        divClassificacao.setAttribute("style","flex-grow:1;");
+        hCardTitle.appendChild(document.createTextNode(this.titulo));
+        divGenero.appendChild(document.createTextNode(this.genero));
+        divAnoProducao.appendChild(document.createTextNode(this.ano));
+        divClassificacao.appendChild(document.createTextNode(this.classificacao));
+        divDetalhes.appendChild(divGenero);
+        divDetalhes.appendChild(divAnoProducao);
+        divDetalhes.appendChild(divClassificacao);
+        card.appendChild(imgCartaz);
+        card.appendChild(cardBody);
+        cardBody.appendChild(hCardTitle);
+        cardBody.appendChild(divDetalhes);
+    
+        this.setBtnDetalhes();
+        cardBody.appendChild(this.getBtnDetalhes());
+    
+        return card;
+    }
+    setBtnDetalhes=()=>{
+        this.btnDetalhes = document.createElement('button');
+        this.btnDetalhes.appendChild(document.createTextNode("Detalhes"));
+        this.btnDetalhes.setAttribute("id",this.id);
+        this.btnDetalhes.setAttribute("class","btnDetalhesFilme");
+    }
+    
+    getBtnDetalhes=()=>{
+        return this.btnDetalhes;
     }
 }
