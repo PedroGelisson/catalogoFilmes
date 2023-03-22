@@ -6,23 +6,23 @@ let btnBuscarFilme = document.querySelector("#btn-buscar-filme");
 btnBuscarFilme.onclick = () => {
     if(inputBuscarFilme.value.length > 0){
         let filmes = new Array();
-        fetch("https://www.omdbapi.com/?apikey=d24fb342&s="+inputBuscarFilme.value)
+        fetch("https://www.omdbapi.com/?apikey=ed5e5ad5&&s="+inputBuscarFilme.value)
         .then((resp) => resp.json())
         .then((resp) => {
             resp.Search.forEach((item) => {
-                console.log(item);
+               //console.log(item);
                 let filme = new Filme(
-                    item.imdbID, //id
-                    item.Title, //titulo
-                    item.Year, //ano
-                    null, //genero
-                    null, //duracao
-                    null, //sinopse
-                    item.Poster, //cartaz
-                    null, //direcao
-                    null, //elenco
-                    null, //classificacao
-                    null, //avaliacao
+                    item.imdbID, 
+                    item.Title, 
+                    item.Year,
+                    null, 
+                    null, 
+                    null, 
+                    item.Poster, 
+                    null, 
+                    null, 
+                    null, 
+                    null, 
                 );
                 filmes.push(filme);
             });
@@ -38,50 +38,46 @@ let listarFilmes = async (filmes) => {
     //console.log(listaFilmes);
     if(filmes.length > 0) {
         filmes.forEach(async(filme) => {
-            console.log(filme);
+            //console.log(filme);
             listaFilmes.appendChild(await filme.getCard());
             filme.getBtnDetalhes().onclick = () => {
                 detalhesFilme(filme.id);
             }
         });
     }
-
+}
 
     
     let detalhesFilme = async (id) => {
 
-        
-
-        fetch("https://www.omdbapi.com/?apikey=d24fb342&s="+inputBuscarFilme.value)
+        fetch("https://www.omdbapi.com/?apikey=ed5e5ad5&&i="+id)
         .then((resp) => resp.json())
         .then((resp) => {
 
             
             let filme = new Filme(
-                resp.imdbID, //id
-                resp.Title, //titulo
-                resp.Year, //ano
-                resp.Genre, //genero
-                resp.Runtime, //duracao
-                resp.Plot, //sinopse
-                resp.Poster, //cartaz
-                resp.Director, //direcao
-                resp.Actors, //elenco
-                resp.Rated, //classificacao
-                resp.Ratings, //avaliacao
-            );
-
-            
-            filme.getCardDetalhado();
-
-            
-            /*function ocultarDivListaFilmes(){
-                document.getElementsById("lista-filmes").style.display="none";
-            }*/
+                resp.imdbID, 
+                resp.Title, 
+                resp.Year, 
+                resp.Genre.split(","), 
+                resp.Runtime, 
+                resp.Plot,
+                resp.Poster, 
+                resp.Director, 
+                resp.Actors.split(","), 
+                resp.Awards, 
+                resp.imdbRatings, 
+            )
+            //console.log(filme.getCardDetalhesFilme());
+            document.querySelector("#mostrar-filme").appendChild(filme.getCardDetalhesFilme());
         
-            
+            document.querySelector("#lista-filmes").style.display="none";
+            document.querySelector("#mostrar-filme").style.display="flex";
 
         });
     }
 
-}
+    /*let salvar = (filme) => {
+
+        ("filme", JSON.stringify(filme))
+    }*/
