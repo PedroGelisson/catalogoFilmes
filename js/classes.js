@@ -86,6 +86,16 @@ class Filme{
     getBtnDetalhes = () => {
         return this.btnDetalhes;
     }
+    setBtnSalvar = () => {
+        this.btnSalvar = document.createElement("button");
+        this.btnSalvar.appendChild(document.createTextNode("Salvar"));
+        this.btnSalvar.setAttribute("id", this.id);
+        this.btnSalvar.setAttribute("class", "btnSalvar");
+    }
+
+    getBtnSalvar= () => {
+        return this.btnSalvar;
+    }
 
     getDetalhes =  () => {
         let card = document.createElement("div");
@@ -147,21 +157,20 @@ class Filme{
         cardBody.appendChild(divDirecao);
         cardBody.appendChild(divElenco);
 
+        this.setBtnSalvar();
+        cardBody.appendChild(this.getBtnSalvar());
+
         cardDiv.appendChild(cardBody);
         cardContent.appendChild(imgDiv);
         cardContent.appendChild(cardDiv);
 
         card.appendChild(cardContent);
 
-        let btnSalvar = document.createElement('button');
-        btnSalvar.appendChild(document.createTextNode('Salvar'));
-        btnSalvar.setAttribute( 'id', 'btnSalvar');
-        divDetalhes.appendChild(btnSalvar);
 
         let btnFechar = document.createElement('button');
         btnFechar.appendChild(document.createTextNode('Fechar'));
-        btnSalvar.setAttribute( 'id', 'btnFechar');
-        divDetalhes.appendChild(btnFechar);
+        btnFechar.setAttribute( 'id', 'btnFechar');
+        cardBody.appendChild(btnFechar);
 
         return card;
 

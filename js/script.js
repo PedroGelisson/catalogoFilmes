@@ -47,74 +47,64 @@ let listarFilmes = async (filmes) => {
     }
 }
 
-    
-    let detalhesFilme = async (id) => {
+let detalhesFilme = (id) => {
+    fetch("https://www.omdbapi.com/?apikey=57fd27e0&plot=full&i="+id)
+    .then((resp)=> resp.json())
+    .then((resp)=>{
+        let filme = new Filme(
+            resp.imdbID,
+            resp.Title,
+            resp.Year,
+            resp.Genre,
+            resp.Runtime,
+            resp.Plot,
+            resp.Poster,
+            resp.Director,
+            resp.Actors,
+            resp.Rated,
+            resp.imdbRating
+        );
+        let mostrarFilme = document.querySelector("#mostrar-filme");
+        mostrarFilme.appendChild(filme.getDetalhes());
 
-        fetch("https://www.omdbapi.com/?apikey=ed5e5ad5&&i="+id)
-        .then((resp) => resp.json())
-        .then((resp) => {
+        document.querySelector("#btnFechar").onclick= ()=>{
+            document.querySelector("#lista-filmes").style.display="flex";
+            document.querySelector("#mostrar-filme").innerHTML="";
+            document.querySelector("#mostrar-filme").style.display="none"        
+        }
 
+        filme.getBtnSalvar().onclick=()=>{
+            console.log(filme);
             
-            let filme = new Filme(
-                resp.imdbID, 
-                resp.Title, 
-                resp.Year, 
-                resp.Genre.split(","), 
-                resp.Runtime, 
-                resp.Plot,
-                resp.Poster, 
-                resp.Director, 
-                resp.Actors.split(","), 
-                resp.Awards, 
-                resp.imdbRatings, 
-            )
-            //console.log(filme.getDetalhes());
-            document.querySelector("#mostrar-filme").appendChild(filme.getDetalhes());
+            let navFavoritos = document.querySelector("#nav-favoritos");
+            navFavoritos.onclick=()=>{
+                
+    
+            if(localStorage.getItem("filmesFavortitos") == null)
+            {
+               
+                let listaFavoritos = [];
+                listaFavoritos.push(filme);
+                localStorage.setItem("filmesFavoritos",JSON.stringify(listaFavoritos));
+                console.log(listaFavoritos)
+            }else{
+                let listaFavoritos = JSON.parse(localStorage.getItem("filmesFavoritos"));
+                listaFavoritos.push(filme);
+                localStorage.setItem("filmesFavoritos",JSON.stringify(listaFavoritos));
 
-            document.querySelector("#btnFechar").onclick = ()=> {
-                document.querySelector("#lista-filmes").style.display="flex";
-                document.querySelector("#mostrar-filme").innerHTML="";
-                document.querySelector("#mostrar-filme").style.display="none";
+                
+                }
+    
+
             }
-            document.querySelector("#btnSalvar").onclick = ()=> {
-                salvarFilme(filme);
-            }
-            document.querySelector("#lista-filmes").style.display="none";
-            document.querySelector("#mostrar-filme").style.display="flex";
-
-        });
-    }
-let filmeString = localStorage.getItem('filmesFavoritos');
-
-let  filmes = JSON.parse(filmeString);
-filmes.push(filme);
-
-filmes= JSON.stringify(filmes);
-
-localStorage.setItem('filmesFavoritos',filmes);
-
-let navFavoritos = document.querySelector("#nav-favoritos");
-navFavoritos.onclick = ()=>{
-    listarFavoritos();
+        }
+            
+        ocultarFilmes();
+    })
 }
-let filmesFavoritos = localStorage.getItem('filmesFavoritos');
-filmesFavoritos=JSON.parse(filmesFavoritos);
 
-let filmes1 = new Array;
-filmesFavoritos.forEach((item)=>{
-    let filme = new Filme(
-    item.id,
-    item.titulo,
-    item.ano,
-    item.genero,
-    item.duracao,
-    item.sinopse,
-    item.cartaz,
-    item.direcao,
-    item.elenco,
-    item.classificacao,
-    item.avaliacao
-    );
-    filmes1.push(filme);
-});
-listarFilmes(filmes1);
+function ocultarFilmes() {
+    let listaFilmes = document.querySelector("#lista-filmes");
+    listaFilmes.style.display = "none";
+}
+
