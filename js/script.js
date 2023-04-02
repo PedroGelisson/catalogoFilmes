@@ -2,7 +2,7 @@ let inputBuscarFilme = document.querySelector("#input-buscar-filme");
 let btnBuscarFilme = document.querySelector("#btn-buscar-filme");
 
 
-
+//funcao para buscar filme
 btnBuscarFilme.onclick = () => {
     if(inputBuscarFilme.value.length > 0){
         let filmes = new Array();
@@ -31,7 +31,7 @@ btnBuscarFilme.onclick = () => {
     }
     return false;
 }
-
+//funcao para listar filmes na tela
 let listarFilmes = async (filmes) => {
     let listaFilmes = await document.querySelector("#lista-filmes");
     listaFilmes.innerHTML = "";
@@ -46,9 +46,9 @@ let listarFilmes = async (filmes) => {
         });
     }
 }
-
+//funcao para aparecer os detalhes do filme
 let detalhesFilme = (id) => {
-    fetch("https://www.omdbapi.com/?apikey=57fd27e0&plot=full&i="+id)
+    fetch("https://www.omdbapi.com/?apikey=ed5e5ad5&plot=full&i="+id)
     .then((resp)=> resp.json())
     .then((resp)=>{
         let filme = new Filme(
@@ -64,47 +64,90 @@ let detalhesFilme = (id) => {
             resp.Rated,
             resp.imdbRating
         );
-        let mostrarFilme = document.querySelector("#mostrar-filme");
-        mostrarFilme.appendChild(filme.getDetalhes());
+        document.querySelector("#mostrar-filme").appendChild(filme.getDetalhes());
 
-        document.querySelector("#btnFechar").onclick= ()=>{
-            document.querySelector("#lista-filmes").style.display="flex";
-            document.querySelector("#mostrar-filme").innerHTML="";
-            document.querySelector("#mostrar-filme").style.display="none"        
+        document.querySelector("#btnFechar").onclick = () => {
+            document.querySelector("#lista-filmes").style.display = "flex";
+            document.querySelector("#mostrar-filme").innerHTML = "";
+            document.querySelector("#mostrar-filme").style.display = "none";
+
         }
 
-        filme.getBtnSalvar().onclick=()=>{
-            console.log(filme);
+        if(filme.favorito){
+            document.querySelector("#btnRemover").onclick = () => {
+            removerFavorito(filme.id);
+                
+        }
+    }
+    else{
+            document.querySelector("#btnSalvar").onclick = () => {
+                filme.favorito = true;
+                salvarFilme(filme);
             
-            let navFavoritos = document.querySelector("#nav-favoritos");
-            navFavoritos.onclick=()=>{
-                
-    
-            if(localStorage.getItem("filmesFavortitos") == null)
-            {
-               
-                let listaFavoritos = [];
-                listaFavoritos.push(filme);
-                localStorage.setItem("filmesFavoritos",JSON.stringify(listaFavoritos));
-                console.log(listaFavoritos)
-            }else{
-                let listaFavoritos = JSON.parse(localStorage.getItem("filmesFavoritos"));
-                listaFavoritos.push(filme);
-                localStorage.setItem("filmesFavoritos",JSON.stringify(listaFavoritos));
-
-                
-                }
-    
-
             }
         }
+        document.querySelector("#lista-filmes").style.display = "none";
+        document.querySelector("#mostrar-filme").style.display = "flex";
+    });
+}
+
+//funcao para salvar filme no localStorage
+let salvarFilme = (filme) => {
+    filme.favorito = true;
+    let filmesString = localStorage.getItem('filmesFavoritos');
+    if (filmesString == null || filmesString == undefined || filmesString == "") {
+        let arrayFilmes = new Array();
+        localStorage.setItem('filmesFavoritos', JSON.stringify(arrayFilmes));
+        let filmesString = localStorage.getItem('filmesFavoritos');
+        var filmes = JSON.parse(filmesString);
+        filmes.push(filme);
+        filmes = JSON.stringify(filmes);
+        localStorage.setItem('filmesFavoritos', filmes);
+        
+    }
+    else {
+    if(filme.favorito = true)
+        var filmes = JSON.parse(filmesString);
+        filmes.push(filme);
+        filmes = JSON.stringify(filmes);
+        localStorage.setItem('filmesFavoritos', filmes);
+    }
+}
+
+//funcao para pegar filmes da localStorage e adicionar a lista de favoritos
+let navFavoritos = document.querySelector("#nav-favoritos");
+navFavoritos.onclick = () => {
+    listarFavoritos();
+}
+
+let listarFavoritos = () => {
+    let filmesFavoritos = localStorage.getItem('filmesFavoritos');
+    filmesFavoritos = JSON.parse(filmesFavoritos);
+    let filmes = new Array();
+    filmesFavoritos.forEach((item) => {
+        let filme = new Filme(
+            item.id,
+            item.titulo,
+            item.ano,
+            item.genero,
+            item.duracao,
+            item.sinopse,
+            item.cartaz,
+            item.direcao,
+            item.elenco,
+            item.classificacao,
+            item.avaliacao,
             
-        ocultarFilmes();
-    })
+            
+        );
+        
+        if(filme.favorito = true)
+        filmes.push(filme);
+
+    });
+    listarFilmes(filmes);    
 }
 
-function ocultarFilmes() {
-    let listaFilmes = document.querySelector("#lista-filmes");
-    listaFilmes.style.display = "none";
-}
+//falta funcao pra remover favorito
 
+//falta funcao para adicionar filme no formulario
